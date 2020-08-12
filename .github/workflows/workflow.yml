@@ -27,6 +27,6 @@ jobs:
     # deploy web app using publish profile credentials
     - uses: azure/webapps-deploy@v1
       with:
-        app-name: Teams-Bot-Hack
+        app-name: testnode07
         package: .
         publish-profile: ${{ secrets.AZURE_CREDENTIALS_GITHUB_SECRET }}
