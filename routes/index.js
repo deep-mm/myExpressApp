@@ -1,7 +1,7 @@
 var express = require('express');
 const mysql = require('mysql2');
 var router = express.Router();
-require('dotenv').config({ path: './TEST.env' })
+require('dotenv').config({ path: './database.env' })
 
 // MySQL Database Connection
 const db = mysql.createConnection({
