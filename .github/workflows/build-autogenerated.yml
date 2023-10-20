@@ -29,3 +29,6 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+      - name: Run static analysis tests
+        run: npm run static-analysis
