@@ -1,0 +1,51 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build application
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+
+      - name: Static analysis tests
+        run: npm run static-analysis
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v1
+        with:
+          app-name: my-express-app
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: .
+          enable-static-analysis: true
+
+      - name: Cleanup
+        run: npm ci
+
+This workflow will run on every push and pull request to the master branch. It checks out the repository, sets up Node.js, installs dependencies, builds the application, runs tests, performs static analysis tests, deploys the application to Azure Web App, and cleans up afterwards.
+
+Please note that you need to provide the Azure Web App publish profile as a secret named "AZURE_WEBAPP_PUBLISH_PROFILE" in your repository settings for the deployment step to work properly.
+
+Let me know if you need any further assistance!
