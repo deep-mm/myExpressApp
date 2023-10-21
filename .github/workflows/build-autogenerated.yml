@@ -1,0 +1,87 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+
+      - name: Static analysis tests
+        run: npm run static-analysis
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: public
+
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-coverage
+          path: coverage
+
+      - name: Upload static analysis results
+        uses: actions/upload-artifact@v2
+        with:
+          name: static-analysis-results
+          path: static-analysis-results
+
+      - name: Upload build logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-logs
+          path: build-logs
+
+      - name: Upload test logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-logs
+          path: test-logs
+
+      - name: Upload static analysis logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: static-analysis-logs
+          path: static-analysis-logs
+
+      - name: Upload code coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report
+          path: code-coverage-report
+
+      - name: Upload build artifacts to Azure
+        uses: azure/webapps-deploy@v1
+        with:
+          app-name: my-express-app
+          slot-name: production
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: public
+
+      - name: Notify deployment status
+        run: echo "Deployment completed successfully."
