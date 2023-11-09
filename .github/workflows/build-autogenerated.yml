@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build, Test, and Deploy
 
 on:
   push:
@@ -24,3 +24,13 @@ jobs:
 
     - name: Test
       run: npm test
+
+    - name: Eslint Check
+      run: npm run eslint
+
+    - name: Deploy to Azure Functions
+      uses: azure/functions-action@v1
+      with:
+        app-name: your-app-name
+        package: .
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
