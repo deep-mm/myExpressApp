@@ -25,4 +25,5 @@ jobs:
     - name: Test
       run: |
         npm test
-        npm run static-analysis
+        npm run lint
+        npm run build
